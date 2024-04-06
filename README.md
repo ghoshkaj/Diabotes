@@ -1,3 +1,11 @@
+# Diabotes
+
+Try the poe chatbot here: https://poe.com/Diabotes2.0, https://poe.com/Diabotes
+
+Diabotes is an AI-powered chatbot designed to transform the daily management of diabetes into a more intuitive, personalized, and less overwhelming experience. Leveraging real-time health data inputs—like continuous glucose monitoring, heart rate, and sleep patterns—Diabotes provides users with instant, expert advice on nutrition, exercise, and lifestyle adjustments tailored specifically to their unique health profiles and daily routines. Unlike traditional health management tools, Diabotes offers a conversational, supportive experience that feels like chatting with a knowledgeable friend who's always there, day or night, to help navigate the complexities of diabetes care.
+Our platform stands out by prioritizing the user experience, making diabetes management more accessible and less clinical. It's designed to validate and support the user's efforts, offer practical solutions, and encourage a proactive approach to health.
+Our approach not only has the potential to significantly improve quality of life for millions of people living with diabetes but also to reduce long-term healthcare costs by promoting better daily management and preventing complications. With Diabotes, we're not just investing in technology; we're investing in a healthier, happier future for people with diabetes.
+
 # Poe server bot quick start
 
 Welcome to the Poe server bot quick start. This repository serves as a companion to our
@@ -13,79 +21,3 @@ This bot simply repeats the user's query in the response and provides a good sta
 point to build any type of bot. To deploy, run `modal deploy echobot.py`
 
 A correct implementation would look like https://poe.com/EchoBotDemonstration
-
-### TurboAllCapsBot
-
-- This bot responds to the user's query using GPT-3.5-Turbo. It demonstrates how to use
-  the Poe platform to cover the inference costs for your chatbot. To deploy, run
-  `modal deploy turbo_allcapsbot.py`.
-- Before you are able to use the bot, you also need to synchronize the bot's settings
-  with the Poe Platform, the instructions for which are specified
-  [here](https://creator.poe.com/docs/server-bots-functional-guides#updating-bot-settings).
-
-A correct implementation would look like https://poe.com/AllCapsBotDemo
-
-### CatBot
-
-A sample bot that demonstrates the Markdown capabilities of the Poe API. To deploy, run
-`modal deploy catbot/__init__.py`
-
-A correct implementation would look like https://poe.com/CatBotDemo
-
-### ImageResponseBot
-
-A bot that demonstrates how to render an image in the response using Markdown. To
-deploy, run `modal deploy image_response_bot.py`
-
-A correct implementation would look like https://poe.com/ImageResponseBotDemo
-
-### PDFCounterBot
-
-- A bot that demonstrates how to enable file upload for the users of your bot.
-- Before you are able to use the bot, you also need to synchronize the bot's settings
-  with the Poe Platform, the instructions for which are specified
-  [here](https://creator.poe.com/docs/server-bots-functional-guides#updating-bot-settings).
-- To deploy, run `modal deploy pdf_counter_bot.py`
-
-A correct implementation would look like https://poe.com/PDFCounterBotDemo
-
-### VideoBot
-
-- A bot that demonstrates how to attach files to your bot response. This example
-  specifically uses video, but outputting other file types is fairly similar.
-- Before you are able to use this bot, you do need to set your access key. You can get
-  yours from the [create bot page](https://poe.com/create_bot?server=1).
-- To deploy, run `modal deploy video_bot.py`
-
-### Function calling bot
-
-- A bot that demonstrates how to use the Poe API for function calling.
-- Before you are able to use the bot, you also need to synchronize the bot's settings
-  with the Poe Platform, the instructions for which are specified
-  [here](https://creator.poe.com/docs/server-bots-functional-guides#updating-bot-settings).
-- To deploy, run `modal deploy function_calling_bot.py`
-
-### HttpRequestBot
-
-Provides an example of how to access HTTP request information in your bot. To deploy,
-run `modal deploy http_request_bot.py`
-
-### HuggingFaceBot
-
-Provides an example of a bot powered by a model hosted on HuggingFace. To deploy, run
-`modal deploy huggingface_bot.py`
-
-### Langchain OpenAI
-
-Provides an example of a bot powered by Langchain. This bot requires you to provide your
-OpenAI key. To deploy, run `modal deploy langchain_openai.py`
-
-### TurboVsClaudeBot
-
-- This is a more advanced example that demonstrates how to render output in realtime
-  comparing two different bots. To deploy, run `modal deploy turbo_vs_claude.py`
-- Before you are able to use the bot, you also need to synchronize the bot's settings
-  with the Poe Platform, the instructions for which are specified
-  [here](https://creator.poe.com/docs/server-bots-functional-guides#updating-bot-settings).
-
-A correct implementation would look like https://poe.com/TurboVsClaudeBotDemo
