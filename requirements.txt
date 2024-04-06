@@ -1,0 +1,2 @@
+fastapi-poe==0.0.36
+vital
