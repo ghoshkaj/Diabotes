@@ -1,24 +1,26 @@
 """
 
-Sample bot that echoes back messages.
-
-This is the simplest possible bot and a great place to start if you want to build your own bot.
+Bot to interact with the Vital API to gather user health data from wearables.
 
 """
 
 from __future__ import annotations
 import uuid
+import os
 
 from typing import AsyncIterable
 
 import fastapi_poe as fp
-from modal import Image, Stub, asgi_app
+from modal import Image, Stub, asgi_app, Secret
+# from dotenv import load_dotenv
+
 
 from vital.client import Vital
 from vital.environment import VitalEnvironment
     
+# load_dotenv()
 
-class EchoBot(fp.PoeBot):
+class VitalBot(fp.PoeBot):
     # initialize the vital client
     def __init__(self, api_key: str, environment: VitalEnvironment=VitalEnvironment.SANDBOX):
         self.client = Vital(
@@ -102,7 +104,7 @@ class EchoBot(fp.PoeBot):
         # call prompt bot
         wearables_prompt = "\nGiven the following health data in the format {’sleep_score’: X/100, ‘cgm’: {timestamp: X mmol/L}, ‘heart_rate’:{timestamp: X bpm}\nData:"
         
-        request.query[-1].content += #wearables_prompt + str(wearables_data)
+        request.query[-1].content += wearables_prompt #+ str(wearables_data)
 
         async for msg in fp.stream_request(
             request, "Diabotes", request.access_key
@@ -112,13 +114,13 @@ class EchoBot(fp.PoeBot):
 
 REQUIREMENTS = ["fastapi-poe==0.0.36", "vital"]
 image = Image.debian_slim().pip_install(*REQUIREMENTS)
-stub = Stub("echobot-poe")
+stub = Stub("vitalbot-poe")
 
 
-@stub.function(image=image)
+@stub.function(image=image, secrets=[Secret.from_name("vital-api-key")])
 @asgi_app()
 def fastapi_app():
-    bot = EchoBot("")
+    bot = VitalBot(os.environ["VITAL_API_KEY"])
     # Optionally, provide your Poe access key here:
     # 1. You can go to https://poe.com/create_bot?server=1 to generate an access key.
     # 2. We strongly recommend using a key for a production bot to prevent abuse,
@@ -128,6 +130,6 @@ def fastapi_app():
     # POE_ACCESS_KEY = ""
     # app = make_app(bot, access_key=POE_ACCESS_KEY)
     app = fp.make_app(bot, allow_without_key=True)
-    app.get("/health")(lambda: {"message": "Welcome to the EchoBot!"})
+    app.get("/health")(lambda: {"message": "Welcome to the VitalBot!"})
     app.post("/create_user")(bot.create_user)
     return app
