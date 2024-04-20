@@ -7,6 +7,7 @@ This is the simplest possible bot and a great place to start if you want to buil
 """
 
 from __future__ import annotations
+import uuid
 
 from typing import AsyncIterable
 
@@ -15,9 +16,15 @@ from modal import Image, Stub, asgi_app
 
 from vital.client import Vital
 from vital.environment import VitalEnvironment
-
+    
 
 class EchoBot(fp.PoeBot):
+    # initialize the vital client
+    def __init__(self, api_key: str, environment: VitalEnvironment=VitalEnvironment.SANDBOX):
+        self.client = Vital(
+            api_key=api_key,
+            environment=environment
+        )
 
     async def get_wearables_data(self):
         client_garmin = Vital(
@@ -67,6 +74,19 @@ class EchoBot(fp.PoeBot):
 
     async def get_settings(self, setting: fp.SettingsRequest) -> fp.SettingsResponse:
         return fp.SettingsResponse(server_bot_dependencies={"Diabotes": 1}, allow_attachments=True)
+    
+    async def create_user(self) -> str:
+        # generate random uuid using python library
+        client_user_id = uuid.uuid4()
+        user_data = self.client.user.create(client_user_id=client_user_id)
+        print(user_data)
+        
+        # generate token link for user to register devices
+        token_link = self.client.link.token(user_id=user_data.user_id)
+        print(token_link)
+        # format the returned token with the base url
+        token_link = f"https://link.tryvital.io/?token={token_link.link_token}&env=sandbox&region=us"
+        return token_link
 
     async def get_response(
         self, request: fp.QueryRequest
@@ -74,14 +94,15 @@ class EchoBot(fp.PoeBot):
         last_message = request.query[-1].content
 
         # get data
-        wearables_data = await self.get_wearables_data()
-        print('wearables_data')
-        print(str(wearables_data))
+        # wearables_data = await self.get_wearables_data()
+        # print('wearables_data')
+        # print(str(wearables_data))
+        device_linking_link = await self.create_user()
 
         # call prompt bot
         wearables_prompt = "\nGiven the following health data in the format {’sleep_score’: X/100, ‘cgm’: {timestamp: X mmol/L}, ‘heart_rate’:{timestamp: X bpm}\nData:"
         
-        request.query[-1].content += wearables_prompt + str(wearables_data)
+        request.query[-1].content += #wearables_prompt + str(wearables_data)
 
         async for msg in fp.stream_request(
             request, "Diabotes", request.access_key
@@ -97,7 +118,7 @@ stub = Stub("echobot-poe")
 @stub.function(image=image)
 @asgi_app()
 def fastapi_app():
-    bot = EchoBot()
+    bot = EchoBot("")
     # Optionally, provide your Poe access key here:
     # 1. You can go to https://poe.com/create_bot?server=1 to generate an access key.
     # 2. We strongly recommend using a key for a production bot to prevent abuse,
@@ -107,4 +128,6 @@ def fastapi_app():
     # POE_ACCESS_KEY = ""
     # app = make_app(bot, access_key=POE_ACCESS_KEY)
     app = fp.make_app(bot, allow_without_key=True)
+    app.get("/health")(lambda: {"message": "Welcome to the EchoBot!"})
+    app.post("/create_user")(bot.create_user)
     return app
