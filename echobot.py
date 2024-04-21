@@ -1,9 +1,6 @@
 """
-
 Sample bot that echoes back messages.
-
 This is the simplest possible bot and a great place to start if you want to build your own bot.
-
 """
 
 from __future__ import annotations
@@ -58,7 +55,7 @@ class EchoBot(fp.PoeBot):
         heart_rate_dict = {key: heart_rate.activity[0].data["timeOffsetHeartRateSamples"][key] 
                         for key in heart_rate.activity[0].data["timeOffsetHeartRateSamples"] 
                         if int(key) % 300 == 0}
-        
+
         return {
             "sleep_score": sleep_score,
             "cgm": cgm_dict_new,
@@ -80,7 +77,7 @@ class EchoBot(fp.PoeBot):
 
         # call prompt bot
         wearables_prompt = "\nGiven the following health data in the format {’sleep_score’: X/100, ‘cgm’: {timestamp: X mmol/L}, ‘heart_rate’:{timestamp: X bpm}\nData:"
-        
+
         request.query[-1].content += wearables_prompt + str(wearables_data)
 
         async for msg in fp.stream_request(
